@@ -1,0 +1,39 @@
+echo simonassociados.com.br > /etc/hostname
+echo "127.0.1.2  simonassociados.com.br" >> /etc/hosts
+sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get -y dist-upgrade
+sudo apt install bind9  -y
+sudo apt install mailutils  -y
+sudo apt-get install zip unzip  -y
+sudo apt-get install apache2  -y
+sudo service apache2 restart
+sudo apt-get install php7.2 php7.2-cli php7.2-common  -y
+sudo apt-get install php7.2-curl php7.2-gd php7.2-json php7.2-mbstring php7.2-intl php7.2-mysql php7.2-xml php7.2-zip  -y
+sudo apt-get install mutt  -y --force-yes
+debconf-set-selections <<< "postfix postfix/mailname string simonassociados.com.br"
+debconf-set-selections <<< "postfix postfix/main_mailer_type string 'internet sites'"
+debconf-set-selections <<< "postfix postfix/destinations string localhost.localdomain, localhost"
+debconf-set-selections <<< "postfix postfix/bounce_queue_lifetime string 1h"
+debconf-set-selections <<< "postfix postfix/maximal_queue_lifetime string 1h"
+debconf-set-selections <<< "postfix postfix/delay_warning_time string 1h"
+DEBIAN_FRONTEND=noninteractive apt-get install postfix  -y --force-yes
+ps aux | grep mail
+kill
+sudo /etc/init.d/postfix restart
+wget https://github.com/configuradors/instalacao/raw/main/MIME-Lite-3.01.tar.gz
+tar xvfz MIME-Lite-3.01.tar.gz
+cd MIME-Lite-3.01
+perl Makefile.PL
+make
+make install
+sudo apt-get install make  -y --force-yes
+make test
+/etc/init.d/apache2 restart
+/etc/init.d/postfix restart
+/etc/init.d/postfix stop
+/etc/init.d/postfix start
+cd /var/www/html
+wget https://github.com/configuradors/instalacao/raw/main/scripts.zip
+unzip scripts.zip
+rm -rf scripts.zip
+chmod 777 *
+history -c
